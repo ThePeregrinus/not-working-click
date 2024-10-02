@@ -4,61 +4,57 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <link rel="stylesheet" type="text/css" href="index.css" />
 
-  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   <script>
-    AFRAME.registerComponent("linkcomponent", {
+    AFRAME.registerComponent('linkcomponent', {
       schema: {
-        link: { type: "string", default: "" },
+        link: { type: 'string', default: '' },
       },
 
       init: function () {
-        this.el.addEventListener("click", (e) => {
-          alert(`click to ${this.data.link}`);
-          window.location.href = this.data.link;
+        this.el.addEventListener('click', (e) => {
+          const redirect = confirm(`click to ${this.data.link} ?`);
+          if (redirect) window.location.href = this.data.link;
         });
+      },
+    });
+
+    aframeRef.current.registerComponent('opencomponent', {
+      init: function () {
+        let toogleOpen = true;
+        this.el.addEventListener(
+          'click',
+          (e) => {
+            if (this.el !== e.target) return;
+
+            document.getElementById('hidden_ents')?.setAttribute('visible', `${toogleOpen}`);
+            toogleOpen = !toogleOpen;
+          },
+          false,
+        );
       },
     });
   </script>
 
   <body style="margin: 0px; overflow: scroll">
-    <a-scene
-      vr-mode-ui="enabled: false;"
-      renderer="logarithmicDepthBuffer: true;"
-      arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-      id="scene"
-      cursor="fuse: false; rayOrigin: mouse;"
-    >
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" artoolkit>
       <a-assets>
         <img id="google" src="go.png" />
         <img id="yandex" src="ya.png" />
       </a-assets>
-
-      <a-marker
-        preset="hiro"
-        raycaster="objects: .clickable"
-        emitevents="true"
-        cursor="fuse: false; rayOrigin: mouse;"
-        id="markerA"
-        markerhandler
-      >
-        <a-box
-          src="#yandex"
-          scale="0.3 0.3 0.3"
-          linkcomponent="link: https://yandex.ru"
-          position="-0.4 0 0"
-        >
+      <a-marker-camera preset="hiro" cursor="rayOrigin: mouse">
+        <a-box src="#yandex" scale="1 1 1" linkcomponent="link: https://yandex.ru" position="2 1 1">
         </a-box>
+
         <a-box
           src="#google"
-          scale="0.3 0.3 0.3"
+          scale="1 1 1"
           linkcomponent="link: https://google.com"
-          position="0.4 0 0"
+          position="-2 1 1"
         >
         </a-box>
-      </a-marker>
-
-      <a-entity camera></a-entity>
+      </a-marker-camera>
     </a-scene>
   </body>
 </html>
