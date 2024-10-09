@@ -153,8 +153,6 @@
     .hidden-item {
       display: none;
     }
-    .main-content-text {
-    }
 
     /* @media screen and (max-width: 1400px) {
       .modal {
@@ -192,8 +190,58 @@
         width: 100%;
       }
     }
+
+    .wrapper-orientation-alert {
+      font-family: 'Arial';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      justify-content: flex-end;
+      z-index: 999;
+    }
+
+    .modal-alert {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 110px;
+      align-items: center;
+      width: 100%;
+      font-size: 50px;
+      color: #ffffff;
+      font-weight: 700;
+      background-color: #12121280;
+    }
+
+    .modal-alert-text {
+      max-width: 700px;
+      text-wrap: wrap;
+    }
+
+    @media (orientation: portrait) {
+      .wrapper-orientation-alert {
+        display: flex;
+      }
+
+      body > *:not(.wrapper-orientation-alert) {
+        filter: blur(8px);
+      }
+    }
   </style>
   <body style="margin: 0px; overflow: hidden">
+    <div class="wrapper-orientation-alert">
+      <div class="modal-alert">
+        <div class="phone-img">
+          <img src="phone.svg" />
+        </div>
+        <div class="modal-alert-text">
+          Поверните телефон горизонтально и наведите камеру на QR-код
+        </div>
+      </div>
+    </div>
     <div class="wrapper">
       <div class="modal">
         <div class="modal-content">
