@@ -13,6 +13,7 @@
 
       const marker = document.querySelector('a-marker');
       const notificationMessage = document.querySelector('.notification-wrapper');
+
       marker.addEventListener('markerFound', (e) => {
         notificationMessage.style.display = 'none';
       });
@@ -220,7 +221,7 @@
       color: white;
     }
 
-    /* @media (orientation: portrait) {
+    @media (orientation: portrait) {
       .wrapper-orientation-alert {
         display: flex;
       }
@@ -228,7 +229,7 @@
       body > *:not(.wrapper-orientation-alert) {
         filter: blur(8px);
       }
-    } */
+    }
 
     @media screen and (max-width: 1200px) {
       .modal {
