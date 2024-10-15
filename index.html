@@ -33,7 +33,7 @@
 
     function handleTab(tabIndex) {
       const tabs = document.querySelectorAll('.tab');
-      const contentItems = document.querySelectorAll('.main-content-item');
+      const contentItems = document.querySelectorAll('.main-content-items');
 
       // Reset all tabs and content items
       tabs.forEach((tab, index) => {
@@ -79,7 +79,6 @@
       display: flex;
       width: 50%;
       background-color: #0d54a1;
-      overflow-y: auto;
     }
 
     .modal-content {
@@ -142,20 +141,31 @@
       flex-direction: column;
       border-radius: 4px;
       flex-grow: 1;
+      overflow-y: auto;
+    }
+
+    .main-content::-webkit-scrollbar {
+      display: none;
     }
 
     .main-content-container {
       display: flex;
       flex-direction: column;
+      margin: 20px 20px;
+      gap: 5px;
+    }
+
+    .main-content-items {
     }
 
     .main-content-item {
+      margin-top: 5px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin: 20px 20px;
       cursor: pointer;
     }
+
     .main-content-button {
       box-sizing: content-box;
       background-color: #437dff;
@@ -330,23 +340,82 @@
             </div>
             <div class="main-content">
               <div class="main-content-container">
-                <div class="main-content-item">
-                  <div
-                    class="main-content-text"
-                    onclick="window.open('https://tds-test.itorum.ru/search/viewer?p=1915&m=38312&mod_date=2024-10-08')"
-                  >
-                    Технические характеристики автомобиля
-                  </div>
+                <div class="main-content-items">
+                  <div class="main-content-item">
+                    <div
+                      class="main-content-text"
+                      onclick="window.open('https://tds-test.itorum.ru/search/viewer?p=1915&m=38312&mod_date=2024-10-08')"
+                    >
+                      Технические характеристики автомобиля
+                    </div>
 
-                  <img class="main-content-button" src="go.svg" alt="open md" />
+                    <img class="main-content-button" src="go.svg" alt="open md" />
+                  </div>
+                  <div class="main-content-item">
+                    <div
+                      class="main-content-text"
+                      onclick="window.open('https://tds-test.itorum.ru/search/viewer?p=1915&m=38312&mod_date=2024-10-08')"
+                    >
+                      Ссылка 2
+                    </div>
+
+                    <img class="main-content-button" src="go.svg" alt="open md" />
+                  </div>
+                  <div class="main-content-item">
+                    <div
+                      class="main-content-text"
+                      onclick="window.open('https://tds-test.itorum.ru/search/viewer?p=1915&m=38312&mod_date=2024-10-08')"
+                    >
+                      Ссылка 3
+                    </div>
+
+                    <img class="main-content-button" src="go.svg" alt="open md" />
+                  </div>
+                  <div class="main-content-item">
+                    <div
+                      class="main-content-text"
+                      onclick="window.open('https://tds-test.itorum.ru/search/viewer?p=1915&m=38312&mod_date=2024-10-08')"
+                    >
+                      Ссылка 4
+                    </div>
+
+                    <img class="main-content-button" src="go.svg" alt="open md" />
+                  </div>
+                  <div class="main-content-item">
+                    <div
+                      class="main-content-text"
+                      onclick="window.open('https://tds-test.itorum.ru/search/viewer?p=1915&m=38312&mod_date=2024-10-08')"
+                    >
+                      Ссылка 5
+                    </div>
+
+                    <img class="main-content-button" src="go.svg" alt="open md" />
+                  </div>
+                  <div class="main-content-item">
+                    <div
+                      class="main-content-text"
+                      onclick="window.open('https://tds-test.itorum.ru/search/viewer?p=1915&m=38312&mod_date=2024-10-08')"
+                    >
+                      Ссылка 6
+                    </div>
+
+                    <img class="main-content-button" src="go.svg" alt="open md" />
+                  </div>
                 </div>
                 <div
-                  class="main-content-item hidden-item"
+                  class="main-content-items hidden-item"
                   onclick="window.open('https://tds-test.itorum.ru/search/viewer?p=1953&m=41589&mod_date=2024-10-08')"
                 >
-                  <div class="main-content-text">Залить топливо в бак топливный основной</div>
+                  <div class="main-content-item">
+                    <div class="main-content-text">Залить топливо в бак топливный основной</div>
 
-                  <img class="main-content-button" src="go.svg" alt="open md" />
+                    <img class="main-content-button" src="go.svg" alt="open md" />
+                  </div>
+                  <div class="main-content-item">
+                    <div class="main-content-text">Ссылка 7</div>
+
+                    <img class="main-content-button" src="go.svg" alt="open md" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -379,7 +448,7 @@
       >
         <a-entity
           rotation="0 -90 0"
-          position="0.5 0 0"
+          position="0.194 -0.396 0.119"
           material="src: #info;"
           geometry="primitive: cylinder; height: 0.02; radius: 0.5"
           infocomponent
@@ -387,7 +456,7 @@
 
         <a-entity
           rotation="0 -90 0"
-          position="-2 0 0"
+          position="0.196 0.61 -0.188"
           material="src: #info;"
           geometry="primitive: cylinder; height: 0.02; radius: 0.5"
           infocomponent
