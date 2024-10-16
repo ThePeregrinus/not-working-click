@@ -28,6 +28,21 @@
       marker.addEventListener("markerLost", (e) => {
         notificationMessage.style.display = "flex";
       });
+
+      fetch("https://theperegrinus.github.io/pointsJSON/points.json")
+        .then((res) => res.json())
+        .then((res) =>
+          res.points.map((point) => {
+            const stringPoint = point.join(" ");
+            const entity = document.createElement("a-entity");
+            entity.setAttribute("rotation", "0 90 90");
+            entity.setAttribute("position", stringPoint);
+            entity.setAttribute("material", "src: #info");
+            entity.setAttribute("geometry", "primitive: circle; radius: 0.2");
+            entity.setAttribute("infocomponent", "");
+            marker.appendChild(entity);
+          })
+        );
     };
 
     function closeModal() {
@@ -513,7 +528,8 @@
           geometry="primitive: cylinder; height: 0.02; radius: 0.5"
           infocomponent
         ></a-entity> -->
-        <a-entity
+
+        <!-- <a-entity
           rotation="0 90 90"
           position="-2.15 0 -1.45"
           material="src: #info;"
@@ -541,7 +557,7 @@
           material="src: #info;"
           geometry="primitive: circle; radius: 0.2"
           infocomponent
-        ></a-entity>
+        ></a-entity> -->
       </a-marker>
 
       <a-entity camera></a-entity>
