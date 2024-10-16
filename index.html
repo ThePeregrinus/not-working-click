@@ -31,19 +31,19 @@
 
       fetch("https://theperegrinus.github.io/pointsJSON/points.json")
         .then((res) => res.json())
-        .then((res) =>
+        .then((res) => {
           res.points.map((point) => {
             const stringPoint = point.join(" ");
             console.info(stringPoint);
             const entity = document.createElement("a-entity");
-            entity.setAttribute("rotation", "0 90 90");
+            entity.setAttribute("rotation", "-90 180 0");
             entity.setAttribute("position", stringPoint);
             entity.setAttribute("material", "src: #info");
             entity.setAttribute("geometry", "primitive: circle; radius: 0.2");
             entity.setAttribute("infocomponent", "");
             marker.appendChild(entity);
-          })
-        );
+          });
+        });
     };
 
     function closeModal() {
