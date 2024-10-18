@@ -58,17 +58,27 @@
       const tabs = document.querySelectorAll(".tab");
       const contentItems = document.querySelectorAll(".main-content-items");
 
-      // Reset all tabs and content items
       tabs.forEach((tab, index) => {
         tab.classList.remove("tab-active");
         tab.classList.add("tab-inactive");
         contentItems[index].classList.add("hidden-item");
       });
 
-      // Activate the selected tab and its corresponding content item
       tabs[tabIndex].classList.remove("tab-inactive");
       tabs[tabIndex].classList.add("tab-active");
       contentItems[tabIndex].classList.remove("hidden-item");
+    }
+
+    function closeOrientationalModal() {
+      const modal = document.querySelector(".wrapper-orientation-alert");
+      modal.style.display = "none";
+
+      const bodyElements = document.querySelectorAll(
+        "body > *:not(.wrapper-orientation-alert)"
+      );
+      bodyElements.forEach((element) => {
+        element.style.filter = "none";
+      });
     }
   </script>
   <script>
@@ -215,21 +225,39 @@
     .modal-alert {
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      gap: 100px;
+      justify-content: flex-end;
       max-width: 100%;
       width: 100%;
       height: 100%;
-      font-size: 50px;
-      color: #ffffff;
-      font-weight: 700;
+      font-size: 40px;
       background-color: #12121280;
     }
 
+    .phone-img {
+      margin: auto;
+    }
+
+    .modal-alert-container {
+      margin: 0 35px 35px 35px;
+      padding: 40px;
+      border-radius: 10.52px;
+      display: flex;
+      gap: 40px;
+      flex-direction: column;
+      background-color: #ffffff;
+    }
     .modal-alert-text {
-      max-width: 700px;
       text-align: center;
+    }
+    .modal-alert-button {
+      text-transform: uppercase;
+
+      height: 33px;
+      background-color: #0d54a1;
+      color: #ffffff;
+
+      font-weight: 700;
     }
 
     .notification-wrapper {
@@ -260,7 +288,7 @@
       }
 
       body > *:not(.wrapper-orientation-alert) {
-        filter: blur(8px);
+        filter: blur(18px);
       }
     }
 
@@ -289,6 +317,9 @@
       .notification-message {
         font-size: 26.25px;
       }
+      .modal-alert {
+        gap: 0;
+      }
     }
 
     @media screen and (max-width: 900px) {
@@ -315,6 +346,16 @@
       .phone-img img {
         width: 200px;
       }
+
+      .modal-alert-container {
+        margin: 0 20px 20px 20px;
+      }
+      .modal-alert-text {
+        font-size: 18px;
+      }
+      .modal-alert-button {
+        font-size: 14px;
+      }
     }
 
     @media screen and (max-width: 600px) {
@@ -322,12 +363,9 @@
         width: 65%;
       }
       .modal-alert {
-        gap: 30px;
         font-size: 25px;
       }
-      .phone-img img {
-        width: 150px;
-      }
+
       .notification-message {
         font-size: 16px;
       }
@@ -339,8 +377,17 @@
         <div class="phone-img">
           <img src="phone.svg" />
         </div>
-        <div class="modal-alert-text">
-          Поверните телефон горизонтально и наведите камеру на QR-код
+        <div class="modal-alert-container">
+          <div class="modal-alert-text">
+            Поверните телефон горизонтально и убедитесь, что метка с надписью AR
+            находится в поле зрения камеры
+          </div>
+          <button
+            class="modal-alert-button"
+            onclick="closeOrientationalModal()"
+          >
+            Понятно
+          </button>
         </div>
       </div>
     </div>
@@ -491,7 +538,7 @@
     </div>
     <a-scene
       embedded
-      arjs="sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;"
+      arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;"
       cursor="fuse: false; rayOrigin: mouse;"
       vr-mode-ui="enabled: false"
     >
