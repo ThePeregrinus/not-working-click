@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+  <link rel="stylesheet" href="index.css" />
   <link
     href="https://fonts.googleapis.com/css?family=Manrope"
     rel="stylesheet"
@@ -54,7 +55,8 @@
                 console.info(coords);
                 const entity = document.createElement("a-entity");
                 entity.setAttribute("rotation", "-90 180 0");
-                entity.setAttribute("position", coords);
+                entity.setAttribute("position", "0 0 0");
+                // entity.setAttribute("position", coords);
                 entity.setAttribute("material", "src: #info");
                 entity.setAttribute(
                   "geometry",
@@ -234,284 +236,7 @@
       },
     });
   </script>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-    .wrapper {
-      font-family: "Manrope";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: none;
-      justify-content: flex-end;
-      z-index: 2;
-    }
 
-    .modal {
-      display: flex;
-      width: 50%;
-      background-color: #0d54a1;
-    }
-
-    .modal-content {
-      width: 100%;
-      height: 100%;
-      margin: 30px 40px;
-      color: white;
-    }
-
-    .header-text {
-      font-weight: 700;
-      font-size: 42px;
-      text-transform: uppercase;
-    }
-
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .header-close-button {
-      box-sizing: content-box;
-      cursor: pointer;
-      padding: 18px;
-    }
-
-    .main {
-      height: 80%;
-      margin: 20px 0;
-      font-size: 35px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .tabs {
-      display: flex;
-    }
-    .tab-active {
-      color: #000000;
-      background-color: #e0e7f0;
-    }
-
-    .tab-inactive {
-      color: #ffffff;
-      background-color: #0d54a1;
-    }
-
-    .tab {
-      padding: 15px 20px;
-      border-radius: 10px 10px 0 0;
-      cursor: pointer;
-      width: 50%;
-      word-break: break-word;
-      text-align: center;
-    }
-
-    .main-content {
-      background-color: #e0e7f0;
-      color: #0d54a1;
-      display: flex;
-      flex-direction: column;
-      border-radius: 0 0 4px 4px;
-      flex-grow: 1;
-      overflow-y: auto;
-    }
-
-    .main-content::-webkit-scrollbar {
-      display: none;
-    }
-
-    .main-content-container {
-      display: flex;
-      flex-direction: column;
-      margin: 10px 20px;
-      gap: 5px;
-    }
-
-    .main-content-item {
-      margin-top: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      align-items: flex-start;
-
-      cursor: pointer;
-    }
-
-    .main-content-button {
-      box-sizing: content-box;
-      background-color: #437dff;
-      padding: 25.71px 32.14px 25.71px 35.36px;
-      border-radius: 16px;
-    }
-
-    .hidden-item {
-      display: none;
-    }
-
-    .wrapper-orientation-alert {
-      font-family: "Arial";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: none;
-      justify-content: flex-end;
-      z-index: 999;
-    }
-
-    .modal-alert {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      max-width: 100%;
-      width: 100%;
-      height: 100%;
-      font-size: 40px;
-      background-color: #12121280;
-    }
-
-    .phone-img {
-      margin: auto;
-    }
-
-    .modal-alert-container {
-      margin: 0 35px 35px 35px;
-      padding: 40px;
-      border-radius: 10.52px;
-      display: flex;
-      gap: 40px;
-      flex-direction: column;
-      background-color: #0d54a1;
-    }
-    .modal-alert-text {
-      text-align: center;
-      color: #ffffff;
-    }
-
-    .notification-wrapper {
-      font-family: "Arial";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      z-index: 1;
-    }
-    .notification-message {
-      font-size: 36px;
-      border-radius: 26px;
-      padding: 33.6px 32px;
-      background-color: #e31f24;
-      color: white;
-    }
-
-    @media (orientation: portrait) {
-      .wrapper-orientation-alert {
-        display: flex;
-      }
-
-      body > *:not(.wrapper-orientation-alert) {
-        filter: blur(18px);
-      }
-    }
-
-    @media screen and (max-width: 1200px) {
-      .modal {
-        width: 55%;
-      }
-
-      .header-text {
-        font-size: 22.88px;
-      }
-      .header-close-button {
-        padding: 11.25px;
-        width: 27.5px;
-      }
-      .main-content-button {
-        width: 12.22px;
-        padding: 13.74px 17.19px 13.74px 18.9px;
-      }
-      .tab {
-        padding: 9.38px 12.5px;
-      }
-      .main {
-        font-size: 22.88px;
-        margin: 10px 0;
-      }
-      .notification-message {
-        font-size: 26.25px;
-      }
-      .modal-alert {
-        gap: 0;
-      }
-    }
-
-    @media screen and (max-width: 900px) {
-      .header-text {
-        font-size: 18px;
-      }
-      .modal {
-        width: 60%;
-      }
-      .main {
-        font-size: 18px;
-      }
-      .notification-message {
-        font-size: 20px;
-      }
-      .main-content-button {
-        width: 10.4px;
-        padding: 11.68px 14.61px 11.68px 16.07px;
-      }
-      .tab {
-        padding: 8.02px 10.7px;
-      }
-
-      .modal-content {
-        margin: 15px 20px;
-      }
-
-      .phone-img img {
-        width: 200px;
-      }
-
-      .modal-alert-container {
-        margin: 0 20px 20px 20px;
-      }
-      .modal-alert-text {
-        font-size: 18px;
-      }
-    }
-
-    @media screen and (max-width: 600px) {
-      .header-text {
-        font-size: 15px;
-      }
-      .main {
-        font-size: 15px;
-      }
-      .modal {
-        width: 65%;
-      }
-      .modal-alert {
-        font-size: 25px;
-      }
-
-      .notification-message {
-        font-size: 16px;
-      }
-    }
-  </style>
   <body style="margin: 0px; overflow: hidden">
     <div class="wrapper-orientation-alert">
       <div class="modal-alert">
@@ -559,15 +284,11 @@
       vr-mode-ui="enabled: false"
     >
       <a-assets>
-        <img id="google" src="go.png" alt="google" />
-        <img id="yandex" src="ya.png" alt="yandex" />
         <img id="info" src="info.png" alt="info" />
       </a-assets>
 
       <a-marker
-        preset="custom"
-        type="pattern"
-        url="marker.patt"
+        preset="hiro"
         raycaster="objects: .clickable"
         emitevents="true"
         cursor="fuse: false; rayOrigin: mouse;"
