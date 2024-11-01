@@ -65,20 +65,8 @@
                 entity.setAttribute("infocomponent", "");
                 entity.addEventListener("click", () => openModal(title, item));
 
-                marker.appendChild(entity);
-
-                // console.log(
-                //   "item",
-                //   item,
-                //   "title",
-                //   title,
-                //   "coords",
-                //   coords,
-                //   "techmap",
-                //   techmap,
-                //   "catalog",
-                //   catalog
-                // );
+                const follower = document.querySelector("#follower");
+                follower.appendChild(entity);
               }
             }
           })
@@ -225,6 +213,42 @@
     }
   </script>
   <script>
+    AFRAME.registerComponent("markerhandler", {
+      init: function () {
+        this.p = new THREE.Vector3();
+        this.q = new THREE.Quaternion();
+        this.s = new THREE.Vector3();
+
+        let marker = this.el;
+        let follower = document.querySelector("#follower");
+
+        marker.addEventListener("markerFound", function () {
+          markerVisible = true;
+          follower.object3D.visible = true;
+          console.log("found");
+        });
+
+        marker.addEventListener("markerLost", function () {
+          markerVisible = false;
+          follower.object3D.visible = false;
+          console.log("lost");
+        });
+      },
+
+      tick: function (time, deltaTime) {
+        let marker = this.el;
+        let follower = document.querySelector("#follower");
+
+        marker.object3D.getWorldPosition(this.p);
+        marker.object3D.getWorldQuaternion(this.q);
+        marker.object3D.getWorldScale(this.s);
+
+        follower.object3D.position.lerp(this.p, 1);
+        follower.object3D.quaternion.slerp(this.q, 0.025);
+        follower.object3D.scale.lerp(this.s, 0.025);
+      },
+    });
+
     AFRAME.registerComponent("infocomponent", {
       schema: {
         link: { type: "string", default: "" },
@@ -233,6 +257,14 @@
 
       init: function () {
         console.log("init function:", this.el);
+      },
+      tick: function (time, timeDelta) {
+        let plane = this.el;
+        let camera = document.querySelector("[camera]");
+        var position = camera.object3D.rotation;
+        plane.object3D.lookAt(
+          new THREE.Vector3(position.x, position.y, position.z)
+        );
       },
     });
   </script>
@@ -294,14 +326,16 @@
         cursor="fuse: false; rayOrigin: mouse;"
         id="markerA"
         markerhandler
+        size="1"
         smooth="true"
-        smoothCount="10"
-        smoothTolerance=".01"
+        smoothCount="5"
+        smoothTolerance="0.05"
         smoothThreshold="5"
       >
         >
       </a-marker>
 
+      <a-entity id="follower"> </a-entity>
       <a-entity camera></a-entity>
     </a-scene>
   </body>
