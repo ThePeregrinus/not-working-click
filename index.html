@@ -55,8 +55,7 @@
                 console.info(coords);
                 const entity = document.createElement("a-entity");
                 entity.setAttribute("rotation", "-90 180 0");
-                entity.setAttribute("position", "0 0 0");
-                // entity.setAttribute("position", coords);
+                entity.setAttribute("position", coords);
                 entity.setAttribute("material", "src: #info");
                 entity.setAttribute(
                   "geometry",
@@ -320,7 +319,9 @@
       </a-assets>
 
       <a-marker
-        preset="hiro"
+        preset="custom"
+        type="pattern"
+        url="marker.patt"
         raycaster="objects: .clickable"
         emitevents="true"
         cursor="fuse: false; rayOrigin: mouse;"
