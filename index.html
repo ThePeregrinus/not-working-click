@@ -110,7 +110,7 @@
         tab.textContent = "Руководство по эксплуатации";
         tabs.append(tab);
 
-        description.forEach(({ title }) => {
+        description.forEach(({ title, publication_id, data_module_id }) => {
           const mainContentItem = document.createElement("div");
           mainContentItem.className = "main-content-item";
 
@@ -119,7 +119,10 @@
           mainContentText.className = "main-content-text";
           mainContentText.textContent = title;
           mainContentText.onclick = () => {
-            window.open("https://example.com");
+            window.open(
+              `https://tds-test2.itorum.ru/publications/viewer?p=${publication_id}&m=${data_module_id}`,
+              "_blank"
+            );
           };
 
           // Create the main-content-button img
@@ -155,7 +158,7 @@
         tab.className = counter === 0 ? "tab tab-active" : "tab tab-inactive";
         tab.textContent = "Технические карты";
         tabs.append(tab);
-        technicalMap.map(({ title }) => {
+        technicalMap.map(({ title, publication_id, data_module_id }) => {
           const mainContentItem = document.createElement("div");
           mainContentItem.className = "main-content-item";
 
@@ -164,7 +167,10 @@
           mainContentText.className = "main-content-text";
           mainContentText.textContent = title;
           mainContentText.onclick = () => {
-            window.open("https://example.com", "_blank");
+            window.open(
+              `https://tds-test2.itorum.ru/publications/viewer?p=${publication_id}&m=${data_module_id}`,
+              "_blank"
+            );
           };
 
           // Create the main-content-button img
