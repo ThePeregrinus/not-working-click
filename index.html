@@ -8,15 +8,8 @@
   <script src="./scripts/aframe-min.js"></script>
   <script src="./scripts/aframe-ar.js"></script>
   <script>
+    const endpoint = "https://tds-test2.itorum.ru";
     window.onload = function () {
-      document
-        .querySelector(".header-close-button")
-        .addEventListener("click", function () {
-          // here you can change also a-scene or a-entity properties, like
-          // changing your 3D model source, size, position and so on
-          // or you can just open links, trigger actions...
-        });
-
       const marker = document.querySelector("a-marker");
       const notificationMessage = document.querySelector(
         ".notification-wrapper"
@@ -36,7 +29,7 @@
 
       if (vin) {
         fetch(
-          `https://tds-test2.itorum.ru/api/on_board_information_system/augmented_reality_coordinates?vin=${vin}`
+          `${endpoint}/api/on_board_information_system/augmented_reality_coordinates?vin=${vin}`
         )
           .then((res) => res.json())
           .then((res) => {
@@ -69,7 +62,9 @@
               }
             }
           })
-          .catch((e) => alert(e));
+          .catch((e) => {
+            alert(e);
+          });
       } else alert("Ошибка клиента: vin не найден");
     };
 
@@ -83,6 +78,26 @@
       [...document.querySelector(".tabs").childNodes].forEach((e) =>
         e.remove()
       );
+    }
+
+    function reloadPage() {
+      location.reload();
+    }
+
+    function toogleFullScreen() {
+      const button = document.getElementById("fullscreen-btn");
+
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+        button.src = "exit-full-btn.svg";
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+        button.src = "full-btn.svg";
+      }
+    }
+
+    function returnBack() {
+      window.location.href = endpoint;
     }
 
     // TODO:
@@ -101,6 +116,8 @@
 
       const tabs = document.querySelector(".tabs");
       let counter = -1;
+
+      const createMainContent = () => {};
       // Create main content item div
       if (description.length) {
         counter++;
@@ -116,8 +133,17 @@
 
           // Create the main-content-text div
           const mainContentText = document.createElement("div");
-          mainContentText.className = "main-content-text";
-          mainContentText.textContent = title;
+          mainContentText.className = "main-content-text-and-logo";
+
+          const portalIcon = document.createElement("img");
+
+          portalIcon.src = "portal.svg";
+          portalIcon.alt = "portal";
+
+          mainContentText.appendChild(portalIcon);
+          const textNode = document.createTextNode(title);
+          mainContentText.appendChild(textNode);
+
           mainContentText.onclick = () => {
             window.open(
               `https://tds-test2.itorum.ru/publications/viewer?p=${publication_id}&m=${data_module_id}`,
@@ -128,7 +154,7 @@
           // Create the main-content-button img
           const mainContentButton = document.createElement("img");
           mainContentButton.className = "main-content-button";
-          mainContentButton.src = "go.svg";
+          mainContentButton.src = "right-arrow.svg";
           mainContentButton.alt = "open md";
 
           // Append the text and image to the main-content-item div
@@ -164,8 +190,17 @@
 
           // Create the main-content-text div
           const mainContentText = document.createElement("div");
-          mainContentText.className = "main-content-text";
-          mainContentText.textContent = title;
+          mainContentText.className = "main-content-text-and-logo";
+
+          const portalIcon = document.createElement("img");
+
+          portalIcon.src = "portal.svg";
+          portalIcon.alt = "portal";
+
+          mainContentText.appendChild(portalIcon);
+          const textNode = document.createTextNode(title);
+          mainContentText.appendChild(textNode);
+          // mainContentText.textContent = title;
           mainContentText.onclick = () => {
             window.open(
               `https://tds-test2.itorum.ru/publications/viewer?p=${publication_id}&m=${data_module_id}`,
@@ -176,7 +211,7 @@
           // Create the main-content-button img
           const mainContentButton = document.createElement("img");
           mainContentButton.className = "main-content-button";
-          mainContentButton.src = "go.svg";
+          mainContentButton.src = "right-arrow.svg";
           mainContentButton.alt = "open md";
 
           // Append the text and image to the main-content-item div
@@ -291,16 +326,12 @@
     <div class="wrapper">
       <div class="modal">
         <div class="modal-content">
-          <div class="header">
-            <div class="header-text">Информация</div>
-            <img
-              class="header-close-button"
-              src="union.svg"
-              alt="close button"
-              onclick="closeModal()"
-            />
+          <div class="modal-tools-button">
+            <img src="backblue.svg" onclick="closeModal()" />
+            <img src="fullblue.svg" onclick="toogleFullScreen()" />
           </div>
           <div class="main">
+            <div class="header-text">Информация</div>
             <div class="tabs"></div>
             <div class="main-content">
               <div class="main-content-container"></div>
@@ -310,18 +341,26 @@
       </div>
     </div>
     <div class="notification-wrapper">
-      <!-- <div class="tools-button">
-        '
+      <div class="tools-button">
         <div>
-          <img src="back-btn.svg" alt="Return Back" />
+          <img src="back-btn.svg" alt="Return Back" onclick="returnBack()" />
         </div>
         <div>
-          <img src="full-btn.svg" alt="Fullscreen toggle" />
+          <img
+            id="fullscreen-btn"
+            src="full-btn.svg"
+            alt="Fullscreen toggle"
+            onclick="toogleFullScreen()"
+          />
         </div>
         <div>
-          <img src="refresh-btn.svg " alt="Refresh page" />
+          <img
+            src="refresh-btn.svg "
+            alt="Reload page"
+            onclick="reloadPage();"
+          />
         </div>
-      </div> -->
+      </div>
       <div class="notification-message">
         Убедитесь, что QR-код находится в поле зрения камеры
       </div>
@@ -336,10 +375,26 @@
         <img id="info" src="info.png" alt="info" />
       </a-assets>
 
-      <a-marker
+      <!-- <a-marker
         preset="custom"
         type="pattern"
         url="marker.patt"
+        raycaster="objects: .clickable"
+        emitevents="true"
+        cursor="fuse: false; rayOrigin: mouse;"
+        id="markerA"
+        markerhandler
+        size="1"
+        smooth="true"
+        smoothCount="5"
+        smoothTolerance="0.05"
+        smoothThreshold="5"
+      >
+        >
+      </a-marker> -->
+
+      <a-marker
+        preset="hiro"
         raycaster="objects: .clickable"
         emitevents="true"
         cursor="fuse: false; rayOrigin: mouse;"
