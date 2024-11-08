@@ -89,10 +89,10 @@
 
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
-        button.src = "exit-full-btn.svg";
+        button.src = "./assets/exit-full-btn.svg";
       } else if (document.exitFullscreen) {
         document.exitFullscreen();
-        button.src = "full-btn.svg";
+        button.src = "./assets/full-btn.svg";
       }
     }
 
@@ -103,6 +103,12 @@
     // TODO:
     // 1. REDURANT CODE
     // 2. CLOSEMODAL() SHOULD REMOVE MODAL AND OPENMODAL() SHOULD CREATE MODAL
+    // 3. ICON TO ASSET FOLDER
+    // 4. REDURANT SOME ICONS
+    // 5. DO NOT SHOW RED ALERT WHEN PORTAIR ON MODAL
+    // 6. FIX USEFUL BUTTONS DONT APPEAR
+
+    // NEED REFACTOR
     function openModal(title, obj) {
       const modal = (document.querySelector(".wrapper").style.display = "flex");
       console.error(obj);
@@ -117,8 +123,6 @@
       const tabs = document.querySelector(".tabs");
       let counter = -1;
 
-      const createMainContent = () => {};
-      // Create main content item div
       if (description.length) {
         counter++;
         const tab = document.createElement("div");
@@ -137,7 +141,7 @@
 
           const portalIcon = document.createElement("img");
 
-          portalIcon.src = "portal.svg";
+          portalIcon.src = "./assets/portal.svg";
           portalIcon.alt = "portal";
 
           mainContentText.appendChild(portalIcon);
@@ -154,7 +158,7 @@
           // Create the main-content-button img
           const mainContentButton = document.createElement("img");
           mainContentButton.className = "main-content-button";
-          mainContentButton.src = "right-arrow.svg";
+          mainContentButton.src = "./assets/right-arrow.svg";
           mainContentButton.alt = "open md";
 
           // Append the text and image to the main-content-item div
@@ -194,7 +198,7 @@
 
           const portalIcon = document.createElement("img");
 
-          portalIcon.src = "portal.svg";
+          portalIcon.src = "./assets/portal.svg";
           portalIcon.alt = "portal";
 
           mainContentText.appendChild(portalIcon);
@@ -211,7 +215,7 @@
           // Create the main-content-button img
           const mainContentButton = document.createElement("img");
           mainContentButton.className = "main-content-button";
-          mainContentButton.src = "right-arrow.svg";
+          mainContentButton.src = "./assets/right-arrow.svg";
           mainContentButton.alt = "open md";
 
           // Append the text and image to the main-content-item div
@@ -222,6 +226,14 @@
           const container = document.querySelector(".main-content-container");
           container.appendChild(mainHiddenContentItems);
         });
+      }
+
+      if (counter === 0) {
+        const tab = document.querySelector(".tab");
+        tab.style.setProperty("padding", "0");
+        tab.style.setProperty("border", "none");
+        tab.style.setProperty("width", "auto");
+        tab.classList.remove("tab-active");
       }
     }
 
@@ -313,7 +325,7 @@
     <div class="wrapper-orientation-alert">
       <div class="modal-alert">
         <div class="phone-img">
-          <img src="phone.svg" />
+          <img src="./assets/phone.svg" />
         </div>
         <div class="modal-alert-container">
           <div class="modal-alert-text">
@@ -327,8 +339,8 @@
       <div class="modal">
         <div class="modal-content">
           <div class="modal-tools-button">
-            <img src="backblue.svg" onclick="closeModal()" />
-            <img src="fullblue.svg" onclick="toogleFullScreen()" />
+            <img src="./assets/backblue.svg" onclick="closeModal()" />
+            <img src="./assets/fullblue.svg" onclick="toogleFullScreen()" />
           </div>
           <div class="main">
             <div class="header-text">Информация</div>
@@ -343,19 +355,23 @@
     <div class="notification-wrapper">
       <div class="tools-button">
         <div>
-          <img src="back-btn.svg" alt="Return Back" onclick="returnBack()" />
+          <img
+            src="./assets/back-btn.svg"
+            alt="Return Back"
+            onclick="returnBack()"
+          />
         </div>
         <div>
           <img
             id="fullscreen-btn"
-            src="full-btn.svg"
+            src="./assets/full-btn.svg"
             alt="Fullscreen toggle"
             onclick="toogleFullScreen()"
           />
         </div>
         <div>
           <img
-            src="refresh-btn.svg "
+            src="./assets/refresh-btn.svg "
             alt="Reload page"
             onclick="reloadPage();"
           />
@@ -405,7 +421,6 @@
         smoothTolerance="0.05"
         smoothThreshold="5"
       >
-        >
       </a-marker> -->
 
       <a-entity id="follower"> </a-entity>

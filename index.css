@@ -70,8 +70,8 @@
   display: flex;
 }
 .tab-active {
-  /* color: white; */
-  /* background-color: var(--main-bg-theme); */
+  color: white;
+  background-color: var(--main-bg-theme);
 }
 
 .tab-inactive {
@@ -82,11 +82,11 @@
 .tab {
   padding: 15px 20px;
   cursor: pointer;
-  /* width: 50%; */
+  width: 50%;
   word-break: break-word;
   text-align: center;
   border-radius: 3px;
-  /* border: solid 1px #c4c7c780; */
+  border: solid 1px #c4c7c780;
 }
 
 .main-content {
@@ -134,7 +134,7 @@
   height: 100%;
   display: none;
   justify-content: flex-end;
-  z-index: 999;
+  z-index: 100;
 }
 
 .modal-alert {
