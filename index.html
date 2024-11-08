@@ -48,7 +48,9 @@
                 console.info(coords);
                 const entity = document.createElement("a-entity");
                 entity.setAttribute("rotation", "-90 180 0");
-                entity.setAttribute("position", coords);
+                // entity.setAttribute("position", coords);
+                entity.setAttribute("position", "1.9 0 -1.45");
+
                 entity.setAttribute("material", "src: #info");
                 entity.setAttribute(
                   "geometry",
@@ -390,7 +392,6 @@
         smoothTolerance="0.05"
         smoothThreshold="5"
       >
-        >
       </a-marker>
 
       <!-- <a-marker
