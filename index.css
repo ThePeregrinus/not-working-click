@@ -49,6 +49,10 @@
   font-weight: 700;
   font-size: var(--fs-full-hd);
   text-transform: uppercase;
+
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 
 .header-close-button {
@@ -68,6 +72,10 @@
 
 .tabs {
   display: flex;
+
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
 }
 .tab-active {
   color: white;
