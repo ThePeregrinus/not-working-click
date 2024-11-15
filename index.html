@@ -1,464 +1,96 @@
-<!doctype html>
 <html>
-  <link rel="stylesheet" href="index.css" />
-  <link
-    href="https://fonts.googleapis.com/css?family=Manrope"
-    rel="stylesheet"
-  />
-  <script src="./scripts/aframe-min.js"></script>
-  <script src="./scripts/aframe-ar.js"></script>
-  <script>
-    const endpoint = "https://tds-test2.itorum.ru";
-    window.onload = function () {
-      const marker = document.querySelector("a-marker");
-      const notificationMessage = document.querySelector(
-        ".notification-message"
-      );
-
-      marker.addEventListener("markerFound", (e) => {
-        notificationMessage.style.display = "none";
-      });
-
-      marker.addEventListener("markerLost", (e) => {
-        notificationMessage.style.display = "inline-flex";
-      });
-
-      const params = new URLSearchParams(new URL(window.location.href).search);
-      let vin = null;
-      if (params.has("vin")) vin = params.get("vin");
-
-      if (vin) {
-        fetch(
-          `${endpoint}/api/on_board_information_system/augmented_reality_coordinates?vin=${vin}`
-        )
-          .then((res) => res.json())
-          .then((res) => {
-            for (const key in res) {
-              if (res.hasOwnProperty(key)) {
-                const item = res[key];
-
-                const title = key;
-
-                const coords = `${item.coordinates.x} ${item.coordinates.y} ${item.coordinates.z}`;
-
-                const techmap = item["technical map"];
-
-                const description = item.description;
-
-                console.info(coords);
-                const entity = document.createElement("a-entity");
-                entity.setAttribute("rotation", "-90 180 0");
-                entity.setAttribute("position", coords);
-                entity.setAttribute("material", "src: #info");
-                entity.setAttribute(
-                  "geometry",
-                  "primitive: circle; radius: 0.2"
-                );
-                entity.setAttribute("infocomponent", "");
-                entity.addEventListener("click", () => openModal(title, item));
-
-                const follower = document.querySelector("#follower");
-                follower.appendChild(entity);
-              }
-            }
-          })
-          .catch((e) => {
-            alert(e);
-          });
-      } else alert("Ошибка клиента: vin не найден");
-    };
-
-    //TODO REFACTOR
-    //DELETE MODAL DIV INSTEAD OF THESE LINES
-    function closeModal() {
-      const modal = (document.querySelector(".wrapper").style.display = "none");
-
-      document
-        .querySelectorAll(".main-content-items")
-        .forEach((elem) => elem.parentNode.removeChild(elem));
-
-      [...document.querySelector(".tabs").childNodes].forEach((e) =>
-        e.remove()
-      );
-
-      const toolsBtns = document.querySelector(".modal-tools-button");
-      while (toolsBtns.firstChild) {
-        toolsBtns.removeChild(toolsBtns.firstChild);
+  <head>
+    <title>QR Reader</title>
+    <body>
+      <div id="qr-content">
+        <div id="qr-reader"></div>
+      </div>
+    </body>
+    <style>
+      #html5-qrcode-button-camera-stop {
+        visibility: hidden;
+        display: none;
       }
-    }
 
-    function reloadPage() {
-      location.reload();
-    }
+      #qr-content {
+        height: 90%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
 
-    function toogleFullScreen(isModal = false) {
-      const icon = document.getElementById("fullscreen-btn");
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-        icon.src = "./assets/tools-windowed.svg";
+      #qr-reader {
+        width: 90%;
+      }
 
-        if (isModal) {
-          modalIcon = document.querySelector(".modal-fullscreen-btn");
-          modalIcon.src = "./assets/modal-windowed.svg";
-        }
-      } else if (document.exitFullscreen) {
-        document.exitFullscreen();
-        icon.src = "./assets/tools-fullscreen.svg";
-
-        if (isModal) {
-          modalIcon = document.querySelector(".modal-fullscreen-btn");
-          modalIcon.src = "./assets/modal-fullscren.svg";
+      #qr-reader__dashboard {
+        display: none;
+      }
+    </style>
+    <script src="./scripts/html5-qrcode.min.js"></script>
+    <script>
+      screen.orientation.addEventListener("change", (event) => {
+        const type = event.target.type;
+        const angle = event.target.angle;
+        console.log(`ScreenOrientation change: ${type}, ${angle} degrees.`);
+      });
+    </script>
+    <script>
+      function docReady(fn) {
+        // see if DOM is already available
+        if (
+          document.readyState === "complete" ||
+          document.readyState === "interactive"
+        ) {
+          // call on next available tick
+          setTimeout(fn, 1);
+        } else {
+          document.addEventListener("DOMContentLoaded", fn);
         }
       }
-    }
 
-    function returnBack() {
-      window.location.href = endpoint;
-    }
+      docReady(function () {
+        var resultContainer = document.getElementById("qr-reader-results");
+        var lastResult,
+          countResults = 0;
 
-    // TODO:
-    // 1. REDURANT CODE
-    // 2. CLOSEMODAL() SHOULD REMOVE MODAL AND OPENMODAL() SHOULD CREATE MODAL
-    // 3. ICON TO ASSET FOLDER
-    // 4. REDURANT SOME ICONS
-    // 5. DO NOT SHOW RED ALERT WHEN PORTAIR ON MODAL
-    // 6. FIX USEFUL BUTTONS DONT APPEAR
+        function onScanSuccess(decodedText, decodedResult) {
+          window.location.href = `ar.html?vin=` + decodedText;
+        }
 
-    // NEED REFACTOR
-    function openModal(title, obj) {
-      const tools = document.querySelector(".modal-tools-button");
-
-      const closeIcon = document.createElement("img");
-      closeIcon.src = "./assets/modal-close.svg";
-      closeIcon.alt = "Close modal and return to AR";
-      closeIcon.addEventListener("click", closeModal);
-      closeIcon.classList.add("svg-icon");
-
-      const toogleFullScreenIcon = document.createElement("img");
-      toogleFullScreenIcon.src = document.fullscreenElement
-        ? "./assets/modal-windowed.svg"
-        : "./assets/modal-fullscren.svg";
-
-      toogleFullScreenIcon.addEventListener("click", () =>
-        toogleFullScreen(true)
-      );
-
-      toogleFullScreenIcon.classList.add("modal-fullscreen-btn", "svg-icon");
-
-      tools.appendChild(closeIcon);
-      tools.appendChild(toogleFullScreenIcon);
-
-      const modal = (document.querySelector(".wrapper").style.display = "flex");
-      console.error(obj);
-      const headerText = document.querySelector(".header-text");
-      headerText.textContent = title;
-
-      const { description, "technical map": technicalMap } = obj;
-
-      const mainContentItems = document.createElement("div");
-      mainContentItems.className = "main-content-items";
-
-      const tabs = document.querySelector(".tabs");
-      let counter = -1;
-
-      if (description.length) {
-        counter++;
-        const tab = document.createElement("div");
-        tab.addEventListener("click", () => handleTab(0));
-        tab.className = "tab tab-active";
-        tab.textContent = "Руководство по эксплуатации";
-        tabs.append(tab);
-
-        description.forEach(({ title, publication_id, data_module_id }) => {
-          const mainContentItem = document.createElement("div");
-          mainContentItem.className = "main-content-item";
-
-          // Create the main-content-text div
-          const mainContentText = document.createElement("div");
-          mainContentText.className = "main-content-text-and-logo";
-
-          const portalIcon = document.createElement("img");
-
-          portalIcon.src = "./assets/portal.svg";
-          portalIcon.alt = "portal";
-
-          mainContentText.appendChild(portalIcon);
-          const textNode = document.createTextNode(title);
-          mainContentText.appendChild(textNode);
-
-          mainContentText.onclick = () => {
-            window.open(
-              `${endpoint}/publications/viewer?p=${publication_id}&m=${data_module_id}`,
-              "_blank"
-            );
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        const aspectRatio = width / height;
+        const reverseAspectRatio = height / width;
+        alert(aspectRatio, reverseAspectRatio);
+        let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
+          let minEdgePercentage = 0.7; // 70%
+          let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+          let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
+          return {
+            width: qrboxSize,
+            height: qrboxSize,
           };
+        };
 
-          // Create the main-content-button img
-          const mainContentButton = document.createElement("img");
-          mainContentButton.className = "main-content-button";
-          mainContentButton.src = "./assets/right-arrow.svg";
-          mainContentButton.alt = "open md";
+        const formatsToSupport = [Html5QrcodeSupportedFormats.QR_CODE];
+        const config = {
+          fps: 10, // frame per seconds for qr code scanning
+          qrbox: qrboxFunction,
+          videoConstraints: {
+            facingMode: "environment",
+            aspectRatio: 1,
+          },
+          formatsToSupport,
+        };
 
-          // Append the text and image to the main-content-item div
-          mainContentItem.appendChild(mainContentText);
-          mainContentItem.appendChild(mainContentButton);
-
-          mainContentItems.append(mainContentItem);
-
-          // Append the main-content-item to the body or any other container
-          const container = document.querySelector(".main-content-container");
-          container.appendChild(mainContentItems);
-        });
-      }
-      //----------------------------------content
-      console.log(technicalMap);
-
-      const mainHiddenContentItems = document.createElement("div");
-      mainHiddenContentItems.className =
-        counter === -1
-          ? "main-content-items"
-          : "main-content-items hidden-item";
-
-      if (technicalMap.length) {
-        counter++;
-        const tab = document.createElement("div");
-        tab.addEventListener("click", () => handleTab(1));
-        tab.className = counter === 0 ? "tab tab-active" : "tab tab-inactive";
-        tab.textContent = "Технические карты";
-        tabs.append(tab);
-        technicalMap.map(({ title, publication_id, data_module_id }) => {
-          const mainContentItem = document.createElement("div");
-          mainContentItem.className = "main-content-item";
-
-          // Create the main-content-text div
-          const mainContentText = document.createElement("div");
-          mainContentText.className = "main-content-text-and-logo";
-
-          const portalIcon = document.createElement("img");
-
-          portalIcon.src = "./assets/portal.svg";
-          portalIcon.alt = "portal";
-
-          mainContentText.appendChild(portalIcon);
-          const textNode = document.createTextNode(title);
-          mainContentText.appendChild(textNode);
-          // mainContentText.textContent = title;
-          mainContentText.onclick = () => {
-            window.open(
-              `https://tds-test2.itorum.ru/publications/viewer?p=${publication_id}&m=${data_module_id}`,
-              "_blank"
-            );
-          };
-
-          // Create the main-content-button img
-          const mainContentButton = document.createElement("img");
-          mainContentButton.className = "main-content-button";
-          mainContentButton.src = "./assets/right-arrow.svg";
-          mainContentButton.alt = "open md";
-
-          // Append the text and image to the main-content-item div
-          mainContentItem.appendChild(mainContentText);
-          mainContentItem.appendChild(mainContentButton);
-
-          mainHiddenContentItems.append(mainContentItem);
-          const container = document.querySelector(".main-content-container");
-          container.appendChild(mainHiddenContentItems);
-        });
-      }
-
-      if (counter === 0) {
-        const tab = document.querySelector(".tab");
-        tab.style.setProperty("padding", "0");
-        tab.style.setProperty("border", "none");
-        tab.style.setProperty("width", "auto");
-        tab.style.setProperty("color", "black");
-        tab.style.setProperty("background-color", "transparent");
-        tab.classList.remove("tab-active");
-      }
-    }
-
-    function handleTab(tabIndex) {
-      const tabs = document.querySelectorAll(".tab");
-      const contentItems = document.querySelectorAll(".main-content-items");
-
-      tabs.forEach((tab, index) => {
-        tab.classList.remove("tab-active");
-        tab.classList.add("tab-inactive");
-        contentItems[index].classList.add("hidden-item");
-      });
-
-      tabs[tabIndex].classList.remove("tab-inactive");
-      tabs[tabIndex].classList.add("tab-active");
-      contentItems[tabIndex].classList.remove("hidden-item");
-    }
-
-    function closeOrientationalModal() {
-      const modal = document.querySelector(".wrapper-orientation-alert");
-      modal.style.display = "none";
-
-      const bodyElements = document.querySelectorAll(
-        "body > *:not(.wrapper-orientation-alert)"
-      );
-      bodyElements.forEach((element) => {
-        element.style.filter = "none";
-      });
-    }
-  </script>
-  <script>
-    AFRAME.registerComponent("markerhandler", {
-      init: function () {
-        this.p = new THREE.Vector3();
-        this.q = new THREE.Quaternion();
-        this.s = new THREE.Vector3();
-
-        let marker = this.el;
-        let follower = document.querySelector("#follower");
-
-        marker.addEventListener("markerFound", function () {
-          markerVisible = true;
-          follower.object3D.visible = true;
-          console.log("found");
-        });
-
-        marker.addEventListener("markerLost", function () {
-          markerVisible = false;
-          follower.object3D.visible = false;
-          console.log("lost");
-        });
-      },
-
-      tick: function (time, deltaTime) {
-        let marker = this.el;
-        let follower = document.querySelector("#follower");
-
-        marker.object3D.getWorldPosition(this.p);
-        marker.object3D.getWorldQuaternion(this.q);
-        marker.object3D.getWorldScale(this.s);
-
-        follower.object3D.position.lerp(this.p, 1);
-        follower.object3D.quaternion.slerp(this.q, 0.025);
-        follower.object3D.scale.lerp(this.s, 0.025);
-      },
-    });
-
-    AFRAME.registerComponent("infocomponent", {
-      schema: {
-        link: { type: "string", default: "" },
-        name: { type: "string", default: "herohoehero" },
-      },
-
-      init: function () {
-        console.log("init function:", this.el);
-      },
-      tick: function (time, timeDelta) {
-        let plane = this.el;
-        let camera = document.querySelector("[camera]");
-        var position = camera.object3D.rotation;
-        plane.object3D.lookAt(
-          new THREE.Vector3(position.x, position.y, position.z)
+        var html5QrcodeScanner = new Html5QrcodeScanner(
+          "qr-reader",
+          config,
+          true
         );
-      },
-    });
-  </script>
-
-  <body style="margin: 0px; overflow: hidden">
-    <div class="wrapper-orientation-alert">
-      <div class="modal-alert">
-        <div class="phone-img">
-          <img src="./assets/phone.svg" />
-        </div>
-        <div class="modal-alert-container">
-          <div class="modal-alert-text">
-            Поверните телефон горизонтально и убедитесь, что метка с надписью AR
-            находится в поле зрения камеры
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="wrapper">
-      <div class="modal">
-        <div class="modal-content">
-          <div class="modal-tools-button"></div>
-          <div class="main">
-            <div class="header-text">Информация</div>
-            <div class="tabs"></div>
-            <div class="main-content">
-              <div class="main-content-container"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="notification-wrapper">
-      <div class="tools-button">
-        <img
-          class="svg-icon"
-          alt="return to portal"
-          src="./assets/tools-return.svg"
-          onclick="returnBack()"
-        />
-        <img
-          class="svg-icon"
-          alt="fullscreen toogle"
-          src="./assets/tools-fullscreen.svg"
-          id="fullscreen-btn"
-          onclick="toogleFullScreen()"
-        />
-        <img
-          class="svg-icon"
-          alt="reload page"
-          src="./assets/tools-reload.svg"
-          onclick="reloadPage()"
-        />
-      </div>
-      <div class="notification-message">
-        Убедитесь, что QR-код находится в поле зрения камеры
-      </div>
-    </div>
-    <a-scene
-      embedded
-      arjs="trackingMethod: best; sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;"
-      cursor="fuse: false; rayOrigin: mouse;"
-      vr-mode-ui="enabled: false"
-    >
-      <a-assets>
-        <img id="info" src="info.png" alt="info" />
-      </a-assets>
-
-      <a-marker
-        preset="custom"
-        type="pattern"
-        url="marker.patt"
-        raycaster="objects: .clickable"
-        emitevents="true"
-        cursor="fuse: false; rayOrigin: mouse;"
-        id="markerA"
-        markerhandler
-        size="1"
-        smooth="true"
-        smoothCount="5"
-        smoothTolerance="0.05"
-        smoothThreshold="5"
-      >
-      </a-marker>
-
-      <!-- <a-marker
-        preset="hiro"
-        raycaster="objects: .clickable"
-        emitevents="true"
-        cursor="fuse: false; rayOrigin: mouse;"
-        id="markerA"
-        markerhandler
-        size="1"
-        smooth="true"
-        smoothCount="5"
-        smoothTolerance="0.05"
-        smoothThreshold="5"
-      >
-      </a-marker> -->
-
-      <a-entity id="follower"> </a-entity>
-      <a-entity camera></a-entity>
-    </a-scene>
-  </body>
+        html5QrcodeScanner.render(onScanSuccess);
+      });
+    </script>
+  </head>
 </html>
