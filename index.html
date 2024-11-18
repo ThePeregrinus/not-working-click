@@ -6,6 +6,15 @@
         <div id="qr-reader"></div>
       </div>
     </body>
+    <script>
+      // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+      let h = window.screen.height;
+      let w = window.screen.width;
+      let minValue = Math.min(w, h);
+      alert(minValue);
+      // Then we set the value in the --minV custom property to the root of the document
+      document.documentElement.style.setProperty("--minV", `${minValue}px`);
+    </script>
     <style>
       #html5-qrcode-button-camera-stop {
         visibility: hidden;
@@ -13,14 +22,15 @@
       }
 
       #qr-content {
-        height: 90%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
       }
 
       #qr-reader {
-        width: 90%;
+        height: var(--minV);
+        width: var(--minV);
       }
 
       #qr-reader__dashboard {
@@ -62,7 +72,7 @@
         const height = window.innerHeight;
         const aspectRatio = width / height;
         const reverseAspectRatio = height / width;
-        alert(aspectRatio, reverseAspectRatio);
+
         let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
           let minEdgePercentage = 0.7; // 70%
           let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
@@ -90,6 +100,10 @@
           true
         );
         html5QrcodeScanner.render(onScanSuccess);
+
+        document
+          .getElementById("html5-qrcode-button-camera-permission")
+          .click();
       });
     </script>
   </head>
