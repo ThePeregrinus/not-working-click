@@ -103,10 +103,12 @@
         );
         html5QrcodeScanner.render(onScanSuccess);
 
-        document
-          .getElementById("html5-qrcode-button-camera-permission")
-          .click();
-      });
+        setTimeout(() => {
+          document
+            .getElementById("html5-qrcode-button-camera-permission")
+            .click();
+        });
+      }, 0);
     </script>
   </head>
 </html>
