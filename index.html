@@ -66,49 +66,50 @@
         var lastResult,
           countResults = 0;
 
-        function onScanSuccess(decodedText, decodedResult) {
-          window.location.href = `ar.html?vin=` + decodedText;
-        }
+        async function prep() {
+          const width = window.innerWidth;
+          const height = window.innerHeight;
+          const aspectRatio = width / height;
+          const reverseAspectRatio = height / width;
 
-        const width = window.innerWidth;
-        const height = window.innerHeight;
-        const aspectRatio = width / height;
-        const reverseAspectRatio = height / width;
-
-        let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
-          let minEdgePercentage = 0.7; // 70%
-          let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
-          let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
-          return {
-            width: qrboxSize,
-            height: qrboxSize,
+          let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
+            let minEdgePercentage = 0.7; // 70%
+            let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+            let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
+            return {
+              width: qrboxSize,
+              height: qrboxSize,
+            };
           };
-        };
 
-        const formatsToSupport = [Html5QrcodeSupportedFormats.QR_CODE];
-        const config = {
-          fps: 10, // frame per seconds for qr code scanning
-          qrbox: qrboxFunction,
-          videoConstraints: {
-            facingMode: "environment",
-            aspectRatio: 1,
-          },
-          formatsToSupport,
-        };
+          const formatsToSupport = [Html5QrcodeSupportedFormats.QR_CODE];
+          let devices = await Html5Qrcode.getCameras();
+          console.log(devices);
+          let cameraId = devices[0].id;
+          console.log(devices);
+          const scanner = new Html5Qrcode("qr-reader");
+          const config = {
+            fps: 10, // frame per seconds for qr code scanning
+            qrbox: qrboxFunction,
+            videoConstraints: {
+              aspectRatio: 1,
+              facingMode: { exact: "environment" },
+            },
+            formatsToSupport,
+          };
 
-        var html5QrcodeScanner = new Html5QrcodeScanner(
-          "qr-reader",
-          config,
-          true
-        );
-        html5QrcodeScanner.render(onScanSuccess);
+          const qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            window.location.href = `ar.html?vin=` + decodedText;
+          };
 
-        setTimeout(() => {
-          document
-            .getElementById("html5-qrcode-button-camera-permission")
-            .click();
-        });
-      }, 0);
+          scanner.start(
+            { facingMode: { exact: "environment" } },
+            config,
+            qrCodeSuccessCallback
+          );
+        }
+        prep();
+      });
     </script>
   </head>
 </html>
