@@ -91,10 +91,7 @@
           const config = {
             fps: 10, // frame per seconds for qr code scanning
             qrbox: qrboxFunction,
-            videoConstraints: {
-              aspectRatio: 1,
-              facingMode: { exact: "environment" },
-            },
+
             formatsToSupport,
           };
 
@@ -102,11 +99,19 @@
             window.location.href = `ar.html?vin=` + decodedText;
           };
 
-          scanner.start(
-            { facingMode: { exact: "environment" } },
-            config,
-            qrCodeSuccessCallback
-          );
+          scanner
+            .start(
+              { facingMode: { exact: "environment" } },
+              config,
+              qrCodeSuccessCallback
+            )
+            .catch(() => {
+              scanner.start(
+                { facingMode: { exact: "user" } },
+                config,
+                qrCodeSuccessCallback
+              );
+            });
         }
         prep();
       });
