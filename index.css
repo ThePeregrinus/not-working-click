@@ -282,9 +282,6 @@
   .modal-alert {
     gap: 0;
   }
-  .svg-icon {
-    width: 35px;
-  }
 }
 
 @media screen and (max-width: 900px) {
@@ -320,10 +317,6 @@
   .modal-alert-text {
     font-size: var(--fs-md);
   }
-
-  .svg-icon {
-    width: 25px;
-  }
 }
 
 @media screen and (max-width: 600px) {
@@ -336,8 +329,5 @@
   .notification-message {
     font-size: var(--fs-sm);
     padding: 16px;
-  }
-  .svg-icon {
-    width: 20px;
   }
 }
