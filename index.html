@@ -8,12 +8,10 @@
       </div>
     </body>
     <script>
-      // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+      // qrbox border size script
       let h = window.screen.height;
       let w = window.screen.width;
       let minValue = Math.min(w, h);
-
-      // Then we set the value in the --minV custom property to the root of the document
       document.documentElement.style.setProperty("--minV", `${minValue}px`);
     </script>
     <style>
@@ -73,7 +71,7 @@
           const reverseAspectRatio = height / width;
 
           let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
-            let minEdgePercentage = 0.7; // 70%
+            let minEdgePercentage = 0.5; // percentage for edge
             let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
             let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
             return {
