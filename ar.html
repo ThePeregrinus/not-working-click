@@ -17,10 +17,12 @@
 
       marker.addEventListener("markerFound", (e) => {
         notificationMessage.style.display = "none";
+        marker.setAttribute("found", true);
       });
 
       marker.addEventListener("markerLost", (e) => {
         notificationMessage.style.display = "inline-flex";
+        marker.setAttribute("found", false);
       });
 
       const params = new URLSearchParams(new URL(window.location.href).search);
@@ -107,161 +109,161 @@
     // TODO:
     // 1. REDURANT CODE
     // 2. CLOSEMODAL() SHOULD REMOVE MODAL AND OPENMODAL() SHOULD CREATE MODAL
-    // 3. ICON TO ASSET FOLDER
-    // 4. REDURANT SOME ICONS
-    // 5. DO NOT SHOW RED ALERT WHEN PORTAIR ON MODAL
-    // 6. FIX USEFUL BUTTONS DONT APPEAR
 
     // NEED REFACTOR
     function openModal(obj) {
-      const tools = document.querySelector(".modal-tools-button");
+      const marker = document.querySelector("a-marker");
+      if (marker.getAttribute("found") === "true") {
+        const tools = document.querySelector(".modal-tools-button");
 
-      const closeIcon = document.createElement("img");
-      closeIcon.src = "./assets/modal-close.svg";
-      closeIcon.alt = "Close modal and return to AR";
-      closeIcon.addEventListener("click", closeModal);
-      closeIcon.classList.add("svg-icon");
+        const closeIcon = document.createElement("img");
+        closeIcon.src = "./assets/modal-close.svg";
+        closeIcon.alt = "Close modal and return to AR";
+        closeIcon.addEventListener("click", closeModal);
+        closeIcon.classList.add("svg-icon");
 
-      const toogleFullScreenIcon = document.createElement("img");
-      toogleFullScreenIcon.src = document.fullscreenElement
-        ? "./assets/modal-windowed.svg"
-        : "./assets/modal-fullscren.svg";
+        const toogleFullScreenIcon = document.createElement("img");
+        toogleFullScreenIcon.src = document.fullscreenElement
+          ? "./assets/modal-windowed.svg"
+          : "./assets/modal-fullscren.svg";
 
-      toogleFullScreenIcon.addEventListener("click", () =>
-        toogleFullScreen(true)
-      );
+        toogleFullScreenIcon.addEventListener("click", () =>
+          toogleFullScreen(true)
+        );
 
-      toogleFullScreenIcon.classList.add("modal-fullscreen-btn", "svg-icon");
+        toogleFullScreenIcon.classList.add("modal-fullscreen-btn", "svg-icon");
 
-      tools.appendChild(closeIcon);
-      tools.appendChild(toogleFullScreenIcon);
+        tools.appendChild(closeIcon);
+        tools.appendChild(toogleFullScreenIcon);
 
-      const modal = (document.querySelector(".wrapper").style.display = "flex");
-      console.error(obj);
-      const headerText = document.querySelector(".header-text");
-      headerText.textContent = obj.title_element;
+        const modal = (document.querySelector(".wrapper").style.display =
+          "flex");
+        console.error(obj);
+        const headerText = document.querySelector(".header-text");
+        headerText.textContent = obj.title_element;
 
-      const { description, technical_map: technicalMap } = obj;
+        const { description, technical_map: technicalMap } = obj;
 
-      const mainContentItems = document.createElement("div");
-      mainContentItems.className = "main-content-items";
+        const mainContentItems = document.createElement("div");
+        mainContentItems.className = "main-content-items";
 
-      const tabs = document.querySelector(".tabs");
-      let counter = -1;
+        const tabs = document.querySelector(".tabs");
+        let counter = -1;
 
-      if (description.length) {
-        counter++;
-        const tab = document.createElement("div");
-        tab.addEventListener("click", () => handleTab(0));
-        tab.className = "tab tab-active";
-        tab.textContent = "Руководство по эксплуатации";
-        tabs.append(tab);
+        if (description.length) {
+          counter++;
+          const tab = document.createElement("div");
+          tab.addEventListener("click", () => handleTab(0));
+          tab.className = "tab tab-active";
+          tab.textContent = "Руководство по эксплуатации";
+          tabs.append(tab);
 
-        description.forEach(({ title, publication_id, data_module_id }) => {
-          const mainContentItem = document.createElement("div");
-          mainContentItem.className = "main-content-item";
+          description.forEach(({ title, publication_id, data_module_id }) => {
+            const mainContentItem = document.createElement("div");
+            mainContentItem.className = "main-content-item";
 
-          // Create the main-content-text div
-          const mainContentText = document.createElement("div");
-          mainContentText.className = "main-content-text-and-logo";
+            // Create the main-content-text div
+            const mainContentText = document.createElement("div");
+            mainContentText.className = "main-content-text-and-logo";
 
-          const portalIcon = document.createElement("img");
+            const portalIcon = document.createElement("img");
 
-          portalIcon.src = "./assets/portal.svg";
-          portalIcon.alt = "portal";
+            portalIcon.src = "./assets/portal.svg";
+            portalIcon.alt = "portal";
 
-          mainContentText.appendChild(portalIcon);
-          const textNode = document.createTextNode(title);
-          mainContentText.appendChild(textNode);
+            mainContentText.appendChild(portalIcon);
+            const textNode = document.createTextNode(title);
+            mainContentText.appendChild(textNode);
 
-          mainContentItem.onclick = () => {
-            window.open(
-              `${endpoint}/publications/viewer?p=${publication_id}&m=${data_module_id}`,
-              "_blank"
-            );
-          };
+            mainContentItem.onclick = () => {
+              window.open(
+                `${endpoint}/publications/viewer?p=${publication_id}&m=${data_module_id}`,
+                "_blank"
+              );
+            };
 
-          // Create the main-content-button img
-          const mainContentButton = document.createElement("img");
-          mainContentButton.className = "main-content-button";
-          mainContentButton.src = "./assets/right-arrow.svg";
-          mainContentButton.alt = "open md";
+            // Create the main-content-button img
+            const mainContentButton = document.createElement("img");
+            mainContentButton.className = "main-content-button";
+            mainContentButton.src = "./assets/right-arrow.svg";
+            mainContentButton.alt = "open md";
 
-          // Append the text and image to the main-content-item div
-          mainContentItem.appendChild(mainContentText);
-          mainContentItem.appendChild(mainContentButton);
+            // Append the text and image to the main-content-item div
+            mainContentItem.appendChild(mainContentText);
+            mainContentItem.appendChild(mainContentButton);
 
-          mainContentItems.append(mainContentItem);
+            mainContentItems.append(mainContentItem);
 
-          // Append the main-content-item to the body or any other container
-          const container = document.querySelector(".main-content-container");
-          container.appendChild(mainContentItems);
-        });
-      }
-      //----------------------------------content
-      console.log(technicalMap);
+            // Append the main-content-item to the body or any other container
+            const container = document.querySelector(".main-content-container");
+            container.appendChild(mainContentItems);
+          });
+        }
+        //----------------------------------content
+        console.log(technicalMap);
 
-      const mainHiddenContentItems = document.createElement("div");
-      mainHiddenContentItems.className =
-        counter === -1
-          ? "main-content-items"
-          : "main-content-items hidden-item";
+        const mainHiddenContentItems = document.createElement("div");
+        mainHiddenContentItems.className =
+          counter === -1
+            ? "main-content-items"
+            : "main-content-items hidden-item";
 
-      if (technicalMap.length) {
-        counter++;
-        const tab = document.createElement("div");
-        tab.addEventListener("click", () => handleTab(1));
-        tab.className = counter === 0 ? "tab tab-active" : "tab tab-inactive";
-        tab.textContent = "Технические карты";
-        tabs.append(tab);
-        technicalMap.map(({ title, publication_id, data_module_id }) => {
-          const mainContentItem = document.createElement("div");
-          mainContentItem.className = "main-content-item";
+        if (technicalMap.length) {
+          counter++;
+          const tab = document.createElement("div");
+          tab.addEventListener("click", () => handleTab(1));
+          tab.className = counter === 0 ? "tab tab-active" : "tab tab-inactive";
+          tab.textContent = "Технические карты";
+          tabs.append(tab);
+          technicalMap.map(({ title, publication_id, data_module_id }) => {
+            const mainContentItem = document.createElement("div");
+            mainContentItem.className = "main-content-item";
 
-          // Create the main-content-text div
-          const mainContentText = document.createElement("div");
-          mainContentText.className = "main-content-text-and-logo";
+            // Create the main-content-text div
+            const mainContentText = document.createElement("div");
+            mainContentText.className = "main-content-text-and-logo";
 
-          const portalIcon = document.createElement("img");
+            const portalIcon = document.createElement("img");
 
-          portalIcon.src = "./assets/portal.svg";
-          portalIcon.alt = "portal";
+            portalIcon.src = "./assets/portal.svg";
+            portalIcon.alt = "portal";
 
-          mainContentText.appendChild(portalIcon);
-          const textNode = document.createTextNode(title);
-          mainContentText.appendChild(textNode);
-          // mainContentText.textContent = title;
-          mainContentItem.onclick = () => {
-            window.open(
-              `https://tds-test2.itorum.ru/publications/viewer?p=${publication_id}&m=${data_module_id}`,
-              "_blank"
-            );
-          };
+            mainContentText.appendChild(portalIcon);
+            const textNode = document.createTextNode(title);
+            mainContentText.appendChild(textNode);
+            // mainContentText.textContent = title;
+            mainContentItem.onclick = () => {
+              window.open(
+                `https://tds-test2.itorum.ru/publications/viewer?p=${publication_id}&m=${data_module_id}`,
+                "_blank"
+              );
+            };
 
-          // Create the main-content-button img
-          const mainContentButton = document.createElement("img");
-          mainContentButton.className = "main-content-button";
-          mainContentButton.src = "./assets/right-arrow.svg";
-          mainContentButton.alt = "open md";
+            // Create the main-content-button img
+            const mainContentButton = document.createElement("img");
+            mainContentButton.className = "main-content-button";
+            mainContentButton.src = "./assets/right-arrow.svg";
+            mainContentButton.alt = "open md";
 
-          // Append the text and image to the main-content-item div
-          mainContentItem.appendChild(mainContentText);
-          mainContentItem.appendChild(mainContentButton);
+            // Append the text and image to the main-content-item div
+            mainContentItem.appendChild(mainContentText);
+            mainContentItem.appendChild(mainContentButton);
 
-          mainHiddenContentItems.append(mainContentItem);
-          const container = document.querySelector(".main-content-container");
-          container.appendChild(mainHiddenContentItems);
-        });
-      }
+            mainHiddenContentItems.append(mainContentItem);
+            const container = document.querySelector(".main-content-container");
+            container.appendChild(mainHiddenContentItems);
+          });
+        }
 
-      if (counter === 0) {
-        const tab = document.querySelector(".tab");
-        tab.style.setProperty("padding", "0");
-        tab.style.setProperty("border", "none");
-        tab.style.setProperty("width", "auto");
-        tab.style.setProperty("color", "black");
-        tab.style.setProperty("background-color", "transparent");
-        tab.classList.remove("tab-active");
+        if (counter === 0) {
+          const tab = document.querySelector(".tab");
+          tab.style.setProperty("padding", "0");
+          tab.style.setProperty("border", "none");
+          tab.style.setProperty("width", "auto");
+          tab.style.setProperty("color", "black");
+          tab.style.setProperty("background-color", "transparent");
+          tab.classList.remove("tab-active");
+        }
       }
     }
 
@@ -305,7 +307,6 @@
         marker.addEventListener("markerFound", function () {
           markerVisible = true;
           follower.object3D.visible = true;
-          console.log("found");
         });
 
         marker.addEventListener("markerLost", function () {
@@ -413,7 +414,8 @@
         <img id="info" src="info.png" alt="info" />
       </a-assets>
 
-      <a-marker
+      <!-- <a-marker
+        found="false"
         preset="custom"
         type="pattern"
         url="marker.patt"
@@ -428,9 +430,10 @@
         smoothTolerance="0.05"
         smoothThreshold="5"
       >
-      </a-marker>
+      </a-marker> -->
 
-      <!-- <a-marker
+      <a-marker
+        found="false"
         preset="hiro"
         raycaster="objects: .clickable"
         emitevents="true"
@@ -443,7 +446,7 @@
         smoothTolerance="0.05"
         smoothThreshold="5"
       >
-      </a-marker> -->
+      </a-marker>
 
       <a-entity id="follower"> </a-entity>
       <a-entity camera></a-entity>
