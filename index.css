@@ -227,6 +227,9 @@
   .wrapper-orientation-alert {
     display: flex;
   }
+  .notification-wrapper {
+    display: none;
+  }
 
   body > *:not(.wrapper-orientation-alert):not(.wrapper) {
     filter: blur(18px);

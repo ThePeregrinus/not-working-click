@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
   <link rel="stylesheet" href="index.css" />
   <link
@@ -234,7 +234,7 @@
             // mainContentText.textContent = title;
             mainContentItem.onclick = () => {
               window.open(
-                `https://tds-test2.itorum.ru/publications/viewer?p=${publication_id}&m=${data_module_id}`,
+                `${endpoint}/publications/viewer?p=${publication_id}&m=${data_module_id}`,
                 "_blank"
               );
             };
