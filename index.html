@@ -3,76 +3,85 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>QR Reader</title>
-    <body>
-      <div id="qr-content">
-        <div id="qr-reader"></div>
-      </div>
-    </body>
-    <script>
-      // qrbox border size script
-      let h = window.screen.height;
-      let w = window.screen.width;
-      let minValue = Math.min(w, h);
-      document.documentElement.style.setProperty("--minV", `${minValue}px`);
-    </script>
     <style>
-      #html5-qrcode-button-camera-stop {
-        visibility: hidden;
-        display: none;
-      }
-
-      #qr-content {
+      .wrapper-orientation-alert {
+        font-family: "Arial";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
         height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      #qr-reader,
-      video {
-        height: var(--minV);
-        width: var(--minV);
-      }
-
-      #qr-reader__dashboard {
         display: none;
+        justify-content: flex-end;
+        z-index: 100;
       }
-    </style>
-    <script src="./scripts/html5-qrcode.min.js"></script>
-    <script>
-      screen.orientation.addEventListener("change", (event) => {
-        const type = event.target.type;
-        const angle = event.target.angle;
-        console.log(`ScreenOrientation change: ${type}, ${angle} degrees.`);
-      });
-    </script>
-    <script>
-      function docReady(fn) {
-        // see if DOM is already available
-        if (
-          document.readyState === "complete" ||
-          document.readyState === "interactive"
-        ) {
-          // call on next available tick
-          setTimeout(fn, 1);
-        } else {
-          document.addEventListener("DOMContentLoaded", fn);
+      .modal-alert {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+        background-color: #12121280;
+      }
+      .phone-img {
+        margin: auto;
+      }
+      .modal-alert-container {
+        margin: 0 35px 35px 35px;
+        padding: 40px;
+        border-radius: 10.52px;
+        display: flex;
+        gap: 40px;
+        flex-direction: column;
+        background-color: white;
+      }
+      .modal-alert-text {
+        text-align: center;
+      }
+      @media (orientation: portrait) {
+        .wrapper-orientation-alert {
+          display: flex;
+        }
+        #qr-content {
+          display: none;
         }
       }
+    </style>
+  </head>
+  <body>
+    <div id="qr-content">
+      <div id="qr-reader"></div>
+    </div>
 
-      docReady(function () {
+    <div class="wrapper-orientation-alert">
+      <div class="modal-alert">
+        <div class="phone-img">
+          <img src="./assets/phone.svg" />
+        </div>
+        <div class="modal-alert-container">
+          <div class="modal-alert-text">
+            Поверните телефон горизонтально и убедитесь, что метка с надписью AR
+            находится в поле зрения камеры
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./scripts/html5-qrcode.min.js"></script>
+
+    <script>
+      function initQR() {
         var resultContainer = document.getElementById("qr-reader-results");
         var lastResult,
           countResults = 0;
 
         async function prep() {
-          const width = window.innerWidth;
-          const height = window.innerHeight;
-          const aspectRatio = width / height;
-          const reverseAspectRatio = height / width;
+          const aspectRatio = 1.777778;
 
           let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
-            let minEdgePercentage = 0.5; // percentage for edge
+            let minEdgePercentage = 0.7; // percentage for edge
             let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
             let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
             return {
@@ -113,7 +122,40 @@
             });
         }
         prep();
-      });
+      }
+
+      function docReady(fn) {
+        // see if DOM is already available
+        if (
+          document.readyState === "complete" ||
+          document.readyState === "interactive"
+        ) {
+          // call on next available tick
+          setTimeout(fn, 1);
+        } else {
+          document.addEventListener("DOMContentLoaded", fn);
+        }
+      }
+
+      if (screen.orientation) {
+        if (screen.orientation.type.includes("landscape")) {
+          docReady(initQR);
+          console.log("QR Scanner is ready");
+        } else {
+          let isScriptNotFiredBefore = true;
+
+          screen.orientation.addEventListener("change", () => {
+            if (
+              screen.orientation.type.includes("landscape") &&
+              isScriptNotFiredBefore
+            ) {
+              docReady(initQR);
+              isScriptNotFiredBefore = false;
+              console.log("QR Scanner is ready");
+            }
+          });
+        }
+      }
     </script>
-  </head>
+  </body>
 </html>
