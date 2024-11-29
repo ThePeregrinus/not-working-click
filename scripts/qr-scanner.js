@@ -2,8 +2,8 @@ function initQR() {
   const h = innerHeight;
   const w = innerWidth;
 
-  alert(`h=${h}`);
-  alert(`w=${w}`);
+  console.log(`h=${h}`);
+  console.log(`w=${w}`);
 
   async function prep() {
     const aspectRatio = w >= h ? w / h : h / w;
