@@ -1,6 +1,6 @@
 function initQR() {
   async function prep() {
-    let h = screen.height;
+    let h = screen.availHeight;
     let w = screen.width;
     const aspectRatio = w / h;
     let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
