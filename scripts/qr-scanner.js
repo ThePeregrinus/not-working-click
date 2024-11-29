@@ -2,6 +2,8 @@ function initQR() {
   const h = innerHeight;
   const w = innerWidth;
 
+  // const h = document.documentElement.clientHeight;
+  // const w = document.documentElement.clientWidth;
   console.log(`h=${h}`);
   console.log(`w=${w}`);
 
@@ -73,7 +75,7 @@ if (screen.orientation) {
   } else {
     let isScriptNotFiredBefore = true;
 
-    screen.orientation.addEventListener("change", () => {
+    screen.orientation.addEventListener("resize", () => {
       if (
         screen.orientation.type.includes("landscape") &&
         isScriptNotFiredBefore
