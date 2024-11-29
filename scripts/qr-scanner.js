@@ -1,6 +1,6 @@
 function initQR() {
   async function prep() {
-    let h = screen.availHeight;
+    let h = screen.height;
     let w = screen.width;
     const aspectRatio = w / h;
     let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
@@ -39,6 +39,11 @@ function initQR() {
           config,
           qrCodeSuccessCallback
         );
+      })
+      .then(() => {
+        document
+          .getElementById("qr-reader")
+          .scrollIntoView({ block: "center" });
       });
   }
   prep();
