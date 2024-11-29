@@ -1,5 +1,3 @@
-let h = document.documentElement.clientHeight;
-let w = document.documentElement.clientWidth;
 function initQR() {
   async function prep() {
     let h = screen.height;
