@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+  <link rel="stylesheet" href="styles/phone-alert.css" />
   <link rel="stylesheet" href="styles/ar.css" />
   <link
     href="https://fonts.googleapis.com/css?family=Manrope"
@@ -58,8 +59,6 @@
       } else alert("Ошибка клиента: vin не найден");
     };
 
-    //TODO REFACTOR
-    //DELETE MODAL DIV INSTEAD OF THESE LINES
     function closeModal() {
       const modal = (document.querySelector(".wrapper").style.display = "none");
 
@@ -106,11 +105,6 @@
       window.location.href = endpoint;
     }
 
-    // TODO:
-    // 1. REDURANT CODE
-    // 2. CLOSEMODAL() SHOULD REMOVE MODAL AND OPENMODAL() SHOULD CREATE MODAL
-
-    // NEED REFACTOR
     function openModal(obj) {
       const marker = document.querySelector("a-marker");
       if (marker.getAttribute("found") === "true") {
@@ -162,7 +156,6 @@
             const mainContentItem = document.createElement("div");
             mainContentItem.className = "main-content-item";
 
-            // Create the main-content-text div
             const mainContentText = document.createElement("div");
             mainContentText.className = "main-content-text-and-logo";
 
@@ -182,25 +175,20 @@
               );
             };
 
-            // Create the main-content-button img
             const mainContentButton = document.createElement("img");
             mainContentButton.className = "main-content-button";
             mainContentButton.src = "./assets/right-arrow.svg";
             mainContentButton.alt = "open md";
 
-            // Append the text and image to the main-content-item div
             mainContentItem.appendChild(mainContentText);
             mainContentItem.appendChild(mainContentButton);
 
             mainContentItems.append(mainContentItem);
 
-            // Append the main-content-item to the body or any other container
             const container = document.querySelector(".main-content-container");
             container.appendChild(mainContentItems);
           });
         }
-        //----------------------------------content
-        console.log(technicalMap);
 
         const mainHiddenContentItems = document.createElement("div");
         mainHiddenContentItems.className =
@@ -219,7 +207,6 @@
             const mainContentItem = document.createElement("div");
             mainContentItem.className = "main-content-item";
 
-            // Create the main-content-text div
             const mainContentText = document.createElement("div");
             mainContentText.className = "main-content-text-and-logo";
 
@@ -231,7 +218,6 @@
             mainContentText.appendChild(portalIcon);
             const textNode = document.createTextNode(title);
             mainContentText.appendChild(textNode);
-            // mainContentText.textContent = title;
             mainContentItem.onclick = () => {
               window.open(
                 `${endpoint}/publications/viewer?p=${publication_id}&m=${data_module_id}`,
@@ -239,13 +225,11 @@
               );
             };
 
-            // Create the main-content-button img
             const mainContentButton = document.createElement("img");
             mainContentButton.className = "main-content-button";
             mainContentButton.src = "./assets/right-arrow.svg";
             mainContentButton.alt = "open md";
 
-            // Append the text and image to the main-content-item div
             mainContentItem.appendChild(mainContentText);
             mainContentItem.appendChild(mainContentButton);
 
@@ -358,8 +342,8 @@
         </div>
         <div class="modal-alert-container">
           <div class="modal-alert-text">
-            Поверните телефон горизонтально и убедитесь, что метка с надписью AR
-            находится в поле зрения камеры
+            Для корректной работы с дополненной реальностью, поверните
+            устройство в горизонтальное положение
           </div>
         </div>
       </div>
@@ -401,7 +385,7 @@
         />
       </div>
       <div class="notification-message">
-        Убедитесь, что QR-код находится в поле зрения камеры
+        Убедитесь, что AR-маркер находится в поле зрения камеры
       </div>
     </div>
     <a-scene
