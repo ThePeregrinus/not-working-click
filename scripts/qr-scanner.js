@@ -1,28 +1,15 @@
-function scrollToCenter(elementId) {
-  const element = document.getElementById(elementId);
-  const elementRect = element.getBoundingClientRect();
-  const elementCenter =
-    elementRect.top + window.scrollY + elementRect.height / 2;
-  const windowCenter = window.innerHeight / 2;
-  const scrollTo = elementCenter - windowCenter;
-
-  window.scrollTo({
-    top: scrollTo,
-    behavior: "smooth",
-  });
-}
+const h = innerHeight;
+const w = innerWidth;
 
 function initQR() {
   async function prep() {
-    let h = innerHeight;
-    let w = innerWidth;
-    const aspectRatio = w / h;
+    const aspectRatio = w >= h ? w / h : h / w;
     let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
       let minEdgePercentage = 0.6; // percentage for edge
       let minEdgeSize = Math.min(w, h);
       let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
       return {
-        width: qrboxSize,
+        width: qrboxSize * 1.4,
         height: qrboxSize,
       };
     };
