@@ -14,7 +14,7 @@ function scrollToCenter(elementId) {
 
 function initQR() {
   async function prep() {
-    let h = screen.height;
+    let h = innerHeight;
     let w = screen.width;
     const aspectRatio = w / h;
     let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
@@ -61,7 +61,6 @@ function initQR() {
       });
   }
   prep();
-  scrollToCenter("qr-content");
 }
 
 function docReady(fn) {
