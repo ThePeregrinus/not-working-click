@@ -15,7 +15,7 @@ function scrollToCenter(elementId) {
 function initQR() {
   async function prep() {
     let h = innerHeight;
-    let w = screen.width;
+    let w = innerWidth;
     const aspectRatio = w / h;
     let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
       let minEdgePercentage = 0.6; // percentage for edge
