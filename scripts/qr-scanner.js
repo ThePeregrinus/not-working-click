@@ -1,3 +1,17 @@
+function scrollToCenter(elementId) {
+  const element = document.getElementById(elementId);
+  const elementRect = element.getBoundingClientRect();
+  const elementCenter =
+    elementRect.top + window.scrollY + elementRect.height / 2;
+  const windowCenter = window.innerHeight / 2;
+  const scrollTo = elementCenter - windowCenter;
+
+  window.scrollTo({
+    top: scrollTo,
+    behavior: "smooth",
+  });
+}
+
 function initQR() {
   async function prep() {
     let h = screen.height;
@@ -47,6 +61,7 @@ function initQR() {
       });
   }
   prep();
+  scrollToCenter("qr-content");
 }
 
 function docReady(fn) {
