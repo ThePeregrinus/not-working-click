@@ -5,7 +5,7 @@ function initQR() {
     const aspectRatio = w / h;
     let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
       let minEdgePercentage = 0.7; // percentage for edge
-      let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+      let minEdgeSize = Math.min(w, h);
       let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
       return {
         width: qrboxSize,
