@@ -2,10 +2,12 @@ let h = document.documentElement.clientHeight;
 let w = document.documentElement.clientWidth;
 function initQR() {
   async function prep() {
-    const aspectRatio = w > h ? w / h : h / w;
+    let h = screen.height;
+    let w = screen.width;
+    const aspectRatio = w / h;
     let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
       let minEdgePercentage = 0.7; // percentage for edge
-      let minEdgeSize = Math.min(w, h);
+      let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
       let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
       return {
         width: qrboxSize,
