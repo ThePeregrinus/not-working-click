@@ -1,9 +1,10 @@
-const h = innerHeight;
-const w = innerWidth;
-
-alert(h);
-alert(w);
 function initQR() {
+  const h = innerHeight;
+  const w = innerWidth;
+
+  alert(`h=${h}`);
+  alert(`w=${w}`);
+
   async function prep() {
     const aspectRatio = w >= h ? w / h : h / w;
     let qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
