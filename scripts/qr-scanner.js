@@ -75,7 +75,7 @@ if (screen.orientation) {
   } else {
     let isScriptNotFiredBefore = true;
 
-    document.addEventListener("resize", () => {
+    window.addEventListener("resize", () => {
       if (
         screen.orientation.type.includes("landscape") &&
         isScriptNotFiredBefore
