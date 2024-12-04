@@ -1,12 +1,21 @@
+navigator.permissions
+  .query({ name: "camera" })
+  .then((permissionObj) => {
+    console.log(permissionObj.state);
+  })
+  .catch((error) => {
+    console.log("Got error :", error);
+  });
+
 function initQR() {
-  const height = document.documentElement.clientHeight;
-  const width = document.documentElement.clientWidth;
+  const height = window.innerHeight;
+  const width = window.innerWidth;
 
   async function prep() {
     const aspectRatio = width / height;
     const qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
       const minEdgePercentage = 1; // percentage for edge
-      const minEdgeSize = Math.min(height, width);
+      const minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
       const qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
       return {
         width: qrboxSize,
@@ -65,7 +74,7 @@ if (screen.orientation) {
   } else {
     let isScriptNotFiredBefore = true;
 
-    window.addEventListener("resize", () => {
+    screen.orientation.addEventListener("change", () => {
       if (
         screen.orientation.type.includes("landscape") &&
         isScriptNotFiredBefore
