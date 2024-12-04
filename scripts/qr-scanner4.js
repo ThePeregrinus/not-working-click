@@ -1,25 +1,25 @@
+navigator.permissions
+  .query({ name: "camera" })
+  .then((permissionObj) => {
+    console.log(permissionObj.state);
+  })
+  .catch((error) => {
+    console.log("Got error :", error);
+  });
+
 function initQR() {
-  const height = document.documentElement.clientHeight;
-  const width = document.documentElement.clientWidth;
+  const height = screen.height;
+  const width = screen.width;
 
   async function prep() {
     const aspectRatio = width / height;
-    const qrboxFunction = function (viewfinderWidth, viewfinderHeight) {
-      const minEdgePercentage = 1; // percentage for edge
-      const minEdgeSize = 2000;
-      const qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
-      return {
-        width: qrboxSize,
-        height: qrboxSize,
-      };
-    };
 
     const formatsToSupport = [Html5QrcodeSupportedFormats.QR_CODE];
 
     const scanner = new Html5Qrcode("qr-reader");
     const config = {
       fps: 10, // frame per seconds for qr code scanning
-      qrbox: 2000,
+      qrbox: 3000,
       aspectRatio: aspectRatio,
       formatsToSupport,
     };

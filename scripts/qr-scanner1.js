@@ -1,3 +1,12 @@
+navigator.permissions
+  .query({ name: "camera" })
+  .then((permissionObj) => {
+    console.log(permissionObj.state);
+  })
+  .catch((error) => {
+    console.log("Got error :", error);
+  });
+
 function initQR() {
   const height = window.innerHeight;
   const width = window.innerWidth;
