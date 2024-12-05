@@ -33,8 +33,8 @@ function initQR() {
       formatsToSupport,
     };
 
-    const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-      window.location.href = `ar.html?vin=` + decodedText;
+    const qrCodeSuccessCallback = (decodedText) => {
+      window.location.href = decodedText;
     };
 
     scanner
