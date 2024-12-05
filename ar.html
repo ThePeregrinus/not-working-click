@@ -46,8 +46,6 @@
           .then((res) => res.json())
           .then((res) => {
             res.map((element) => {
-              const title = element.title_element;
-
               const coords = `${element.coordinates.x} ${element.coordinates.y} ${element.coordinates.z}`;
 
               const entity = document.createElement("a-entity");
@@ -65,7 +63,20 @@
           .catch((e) => {
             alert(e);
           });
-      } else alert("Ошибка клиента: vin не найден");
+      } else {
+        const array = [];
+        for (let i = 1; i <= 200; i++) {
+          let obj = { title: `${i} item` };
+          array.push(obj);
+        }
+        console.log(array);
+        openModal({
+          title_element: "heading",
+          technical_map: [],
+          description: array,
+        });
+        // alert("Ошибка клиента: vin не найден");
+      }
     };
 
     function closeModal() {
@@ -157,7 +168,7 @@
     }
     function openModal(obj) {
       const marker = document.querySelector("a-marker");
-      if (marker.getAttribute("found") === "true") {
+      if (marker.getAttribute("found") !== "true") {
         const tools = document.querySelector(".modal-tools-button");
 
         const closeIcon = document.createElement("img");
